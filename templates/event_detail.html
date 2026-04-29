@@ -3,13 +3,15 @@
 {% block content %}
 <div class="event-entry">
     <h2>{{ object.title }}</h2>
-    <p>by {{ object.author }} | {{ object.date }}</p>
+    <p>by {{ object.host }} | {{ object.date }}</p>
     <p>{{ object.location }}</p>
 </div>
 <div>
+    {% if event.host.pk == request.user.pk %}
     <p><a href="{% url 'event_edit' event.pk %}">Edit</a>
         <a href="{% url 'event_cancle' event.pk %}">Cancle</a>
     </p>
+    {% endif %}
     <p>Back to <a href="{% url 'event_list' %}">All Events</a>.</p>
 </div>
 {% endblock content %}

@@ -1,3 +1,7 @@
+from django.contrib.auth.mixins import (
+    LoginRequiredMixin,
+    UserPassesTestMixin,
+)
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import (
     UpdateView,
@@ -18,7 +22,7 @@ class EventDetailView(DetailView):
     template_name = "event_detail.html"
 
 
-class EventUpdateView(UpdateView):
+class EventUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Event
     fields = (
         "title",
@@ -28,20 +32,31 @@ class EventUpdateView(UpdateView):
     )
     template_name = "event_edit.html"
 
+    def test_func(self):
+        obj = self.get_object()
+        return obj.host == self.request.user
 
-class EventCancleView(DeleteView):
+
+class EventCancleView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Event
     template_name = "event_cancle.html"
     success_url = reverse_lazy("event_list")
 
+    def test_func(self):
+        obj = self.get_object()
+        return obj.host == self.request.user
 
-class EventCreateView(CreateView):
+
+class EventCreateView(LoginRequiredMixin, CreateView):
     model = Event
     template_name = "event_new.html"
     fields = (
         "title",
         "location",
         "date",
-        "host",
         "members",
     )
+
+    def form_valid(self, form):
+        form.instance.host = self.request.user
+        return super().form_valid(form)

@@ -16,8 +16,10 @@
         {{ event.location }}
     </div>
     <div class="card-footer text-center text-muted">
+        {% if event.host.pk == request.user.pk %}
         <a href="{% url 'event_edit' event.pk %}">Edit</a>
         <a href="{% url 'event_cancle' event.pk %}">Cancle</a>
+        {% endif %}
     </div>
 </div>
 <br />
