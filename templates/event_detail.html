@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="event-entry">
+    <h2>{{ object.title }}</h2>
+    <p>by {{ object.author }} | {{ object.date }}</p>
+    <p>{{ object.location }}</p>
+</div>
+<div>
+    <p><a href="{% url 'event_edit' event.pk %}">Edit</a>
+        <a href="{% url 'event_cancle' event.pk %}">Cancle</a>
+    </p>
+    <p>Back to <a href="{% url 'event_list' %}">All Events</a>.</p>
+</div>
+{% endblock content %}

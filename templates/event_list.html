@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Events{% endblock title %}
+
+{% block content %}
+{% for event in event_list %}
+<div class="card">
+    <div class="card-header">
+        <span class="fw-bold">
+            <a href="{{ event.get_absolute_url }}">{{ event.title }}</a>
+        </span> &middot;
+        <span class="text-muted">by {{ event.host }} |
+            {{ event.date }}</span>
+    </div>
+    <div class="card-body">
+        {{ event.location }}
+    </div>
+    <div class="card-footer text-center text-muted">
+        <a href="{% url 'event_edit' event.pk %}">Edit</a>
+        <a href="{% url 'event_cancle' event.pk %}">Cancle</a>
+    </div>
+</div>
+<br />
+{% endfor %}
+{% endblock content %}

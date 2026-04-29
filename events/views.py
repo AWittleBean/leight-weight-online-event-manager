@@ -1,13 +1,47 @@
-from django.shortcuts import render
-from django.views.generic import TemplateView
+from django.views.generic import ListView, DetailView
+from django.views.generic.edit import (
+    UpdateView,
+    DeleteView,
+    CreateView,
+)
+from django.urls import reverse_lazy
 from .models import Event
 
 
-# Create your views here.
-class HomePageView(TemplateView):
-    template_name = "home.html"
+class EventListView(ListView):
+    model = Event
+    template_name = "event_list.html"
 
 
-def event_list(request):
-    events = Event.objects.all()
-    return render(request, "home.html", {"events": events})
+class EventDetailView(DetailView):
+    model = Event
+    template_name = "event_detail.html"
+
+
+class EventUpdateView(UpdateView):
+    model = Event
+    fields = (
+        "title",
+        "location",
+        "date",
+        "members",
+    )
+    template_name = "event_edit.html"
+
+
+class EventCancleView(DeleteView):
+    model = Event
+    template_name = "event_cancle.html"
+    success_url = reverse_lazy("event_list")
+
+
+class EventCreateView(CreateView):
+    model = Event
+    template_name = "event_new.html"
+    fields = (
+        "title",
+        "location",
+        "date",
+        "host",
+        "members",
+    )

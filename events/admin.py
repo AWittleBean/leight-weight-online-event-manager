@@ -7,8 +7,10 @@ from .models import Event
 class EventAdmin(admin.ModelAdmin):
     list_display = (
         "title",
-        "date",
+        "location",
         "host",
+        "date",
+        "members",
     )
 
 
