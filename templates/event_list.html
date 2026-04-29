@@ -13,7 +13,7 @@
             {{ event.date }} | {{ event.location }}</span>
     </div>
     <div class="card-body">
-        {{ event.members }}
+        |
     </div>
     <div class="card-footer text-center text-muted">
         {% if event.host.pk == request.user.pk %}

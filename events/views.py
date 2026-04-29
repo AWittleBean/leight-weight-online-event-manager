@@ -10,13 +10,23 @@ from django.views.generic.edit import (
 )
 from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
+from django.db.models import Q
 from .models import Event
 from .forms import EventCreationForm
 
 
-class EventListView(ListView):
+class EventListView(LoginRequiredMixin, ListView):
     model = Event
     template_name = "event_list.html"
+
+    def get_queryset(self):
+        return (
+            Event.objects.filter(
+                Q(member_list=self.request.user) | Q(host=self.request.user)
+            )
+            .distinct()
+            .order_by("-date")
+        )
 
 
 class EventDetailView(DetailView):
@@ -28,6 +38,11 @@ class EventUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Event
     form_class = EventCreationForm
     template_name = "event_edit.html"
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["user"] = self.request.user
+        return kwargs
 
     def test_func(self):
         obj = self.get_object()
@@ -54,6 +69,11 @@ class EventCreateView(LoginRequiredMixin, CreateView):
     model = Event
     template_name = "event_new.html"
     form_class = EventCreationForm
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["user"] = self.request.user
+        return kwargs
 
     def form_valid(self, form):
         form.instance.host = self.request.user
