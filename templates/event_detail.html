@@ -2,9 +2,17 @@
 
 {% block content %}
 <div class="event-entry">
-    <h2>{{ object.title }}</h2>
-    <p>by {{ object.host }} | {{ object.date }}</p>
-    <p>{{ object.location }}</p>
+    <h2>{{ event.title }}</h2>
+    <p>Host: {{ event.host.username }} | Date: {{ event.date }} | Location: {{ event.location }}</p>
+    <p>About the event: </p>
+    <p>
+        With:
+        {% for member in event.member_list.all %}
+            {{ member.username }}{% if not forloop.last %}, {% endif %}
+        {% empty %}
+            No members yet.
+        {% endfor %}
+    </p>
 </div>
 <div>
     {% if event.host.pk == request.user.pk %}

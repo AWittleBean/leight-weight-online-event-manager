@@ -9,11 +9,11 @@
         <span class="fw-bold">
             <a href="{{ event.get_absolute_url }}">{{ event.title }}</a>
         </span> &middot;
-        <span class="text-muted">by {{ event.host }} |
-            {{ event.date }}</span>
+        <span class="text-muted">hosted by {{ event.host.username }} |
+            {{ event.date }} | {{ event.location }}</span>
     </div>
     <div class="card-body">
-        {{ event.location }}
+        {{ event.members }}
     </div>
     <div class="card-footer text-center text-muted">
         {% if event.host.pk == request.user.pk %}

@@ -9,7 +9,9 @@ from django.views.generic.edit import (
     CreateView,
 )
 from django.urls import reverse_lazy
+from django.http import HttpResponseRedirect
 from .models import Event
+from .forms import EventCreationForm
 
 
 class EventListView(ListView):
@@ -24,17 +26,18 @@ class EventDetailView(DetailView):
 
 class EventUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Event
-    fields = (
-        "title",
-        "location",
-        "date",
-        "members",
-    )
+    form_class = EventCreationForm
     template_name = "event_edit.html"
 
     def test_func(self):
         obj = self.get_object()
         return obj.host == self.request.user
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.save()
+        form.save_m2m()
+        return HttpResponseRedirect(self.get_success_url())
 
 
 class EventCancleView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
@@ -50,13 +53,11 @@ class EventCancleView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 class EventCreateView(LoginRequiredMixin, CreateView):
     model = Event
     template_name = "event_new.html"
-    fields = (
-        "title",
-        "location",
-        "date",
-        "members",
-    )
+    form_class = EventCreationForm
 
     def form_valid(self, form):
         form.instance.host = self.request.user
-        return super().form_valid(form)
+        self.object = form.save(commit=False)
+        self.object.save()
+        form.save_m2m()
+        return HttpResponseRedirect(self.get_success_url())

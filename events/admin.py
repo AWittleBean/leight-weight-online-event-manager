@@ -10,8 +10,13 @@ class EventAdmin(admin.ModelAdmin):
         "location",
         "host",
         "date",
-        "members",
+        "member_list_display",
     )
+
+    def member_list_display(self, obj):
+        return ", ".join([m.username for m in obj.member_list.all()])
+
+    member_list_display.short_description = "Members"
 
 
 admin.site.register(Event, EventAdmin)
