@@ -4,7 +4,7 @@
 <div class="event-entry">
     <h2>{{ event.title }}</h2>
     <p>Host: {{ event.host.username }} | Date: {{ event.date }} | Location: {{ event.location }}</p>
-    <p>About the event: </p>
+    <p>About the event: {{ event.information }}</p>
     <p>
         With:
         {% for member in event.member_list.all %}

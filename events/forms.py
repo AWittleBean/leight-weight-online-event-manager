@@ -24,7 +24,7 @@ class EventCreationForm(forms.ModelForm):
         model = Event
         fields = (
             "title",
-            # "information",
+            "information",
             "location",
             "date",
             "member_list",

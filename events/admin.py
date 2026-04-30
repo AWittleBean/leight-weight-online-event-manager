@@ -7,6 +7,7 @@ from .models import Event
 class EventAdmin(admin.ModelAdmin):
     list_display = (
         "title",
+        "information",
         "location",
         "host",
         "date",

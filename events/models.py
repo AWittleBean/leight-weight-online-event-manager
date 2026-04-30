@@ -6,7 +6,7 @@ from django.urls import reverse
 # Create your models here.
 class Event(models.Model):
     title = models.CharField(max_length=200)
-    # information = models.TextField(max_length=200, blank=True)
+    information = models.TextField(max_length=200, blank=True)
     location = models.CharField(max_length=200)
     date = models.DateField()
 
